@@ -1,0 +1,36 @@
+@model List<Kadry.Models.Employee>
+@{
+    ViewData["Title"] = "Работники";
+}
+<h3>Работники</h3>
+<a asp-action="Create" class="btn btn-primary mb-3">Добавить сотрудника</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>ФИО</th><th>Пол</th><th>Подразделение</th><th>Должность</th>
+        <th>Профессия</th><th>Образование</th><th>Оклад</th><th>Дата приёма</th><th style="width:220px"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var e in Model)
+    {
+        <tr>
+            <td>@e.FullName</td>
+            <td>@e.Gender</td>
+            <td>@e.Department?.Name</td>
+            <td>@e.Position?.Name</td>
+            <td>@e.Profession?.Name</td>
+            <td>@e.Education?.Name</td>
+            <td>@e.Salary.ToString("N2")</td>
+            <td>@e.HireDate.ToShortDateString()</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@e.Id" class="btn btn-sm btn-outline-primary">Изменить</a>
+                <form method="post" asp-action="Delete" asp-route-id="@e.Id" style="display:inline" onsubmit="return confirm('Удалить сотрудника?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

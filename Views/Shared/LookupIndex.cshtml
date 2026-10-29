@@ -1,0 +1,38 @@
+@model Kadry.Controllers.LookupIndexViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+<h3>@Model.Title</h3>
+
+<form method="post" asp-controller="@Model.ControllerName" asp-action="Save" class="row g-2 mb-4">
+    <input type="hidden" name="id" value="@Model.EditId" />
+    <div class="col-auto">
+        <input type="text" name="name" value="@Model.EditName" class="form-control" placeholder="Название" style="width:400px" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">@(Model.EditId == null ? "Добавить" : "Сохранить")</button>
+        @if (Model.EditId != null)
+        {
+            <a asp-controller="@Model.ControllerName" asp-action="Index" class="btn btn-secondary">Отмена</a>
+        }
+    </div>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead><tr><th>Id</th><th>Название</th><th style="width:220px"></th></tr></thead>
+    <tbody>
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>
+                <a asp-controller="@Model.ControllerName" asp-action="Index" asp-route-editId="@item.Id" class="btn btn-sm btn-outline-primary">Изменить</a>
+                <form method="post" asp-controller="@Model.ControllerName" asp-action="Delete" asp-route-id="@item.Id" style="display:inline" onsubmit="return confirm('Удалить запись?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

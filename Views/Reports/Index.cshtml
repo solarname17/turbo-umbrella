@@ -1,0 +1,64 @@
+@{
+    ViewData["Title"] = "Отчёты";
+    var columns = ViewBag.Columns as List<string>;
+    var rows = ViewBag.Rows as List<List<string>>;
+    var employees = ViewBag.Employees as List<Kadry.Models.Employee>;
+    string type = ViewBag.Type as string ?? "";
+    string employeeId = Context.Request.Query["employeeId"].ToString();
+}
+<h3>Отчёты</h3>
+
+<form method="get" class="row g-2 mb-3 align-items-end">
+    <div class="col-auto">
+        <label class="form-label">Вид отчёта</label>
+        <select name="type" class="form-select" onchange="this.form.submit()">
+            <option value="">-- выбрать --</option>
+            <option value="card" selected="@(type == "card")">Личная карточка работника</option>
+            <option value="list" selected="@(type == "list")">Список сотрудников по подразделениям</option>
+            <option value="payroll" selected="@(type == "payroll")">Фонд оплаты труда</option>
+            <option value="education" selected="@(type == "education")">Распределение по образованию</option>
+            <option value="staffing" selected="@(type == "staffing")">Штатное расписание</option>
+        </select>
+    </div>
+    @if (type == "card")
+    {
+        <div class="col-auto">
+            <label class="form-label">Сотрудник</label>
+            <select name="employeeId" class="form-select" onchange="this.form.submit()">
+                <option value="">-- выбрать --</option>
+                @foreach (var e in employees!)
+                {
+                    <option value="@e.Id" selected="@(employeeId == e.Id.ToString())">@e.FullName</option>
+                }
+            </select>
+        </div>
+    }
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Сформировать</button>
+    </div>
+</form>
+
+@if (columns != null && rows != null)
+{
+    <form method="post" asp-action="ExportExcel" class="mb-3">
+        <input type="hidden" name="type" value="@type" />
+        <input type="hidden" name="employeeId" value="@employeeId" />
+        <button type="submit" class="btn btn-success">Экспорт в Excel</button>
+    </form>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>@foreach (var c in columns) { <th>@c</th> }</tr>
+        </thead>
+        <tbody>
+        @foreach (var row in rows)
+        {
+            <tr>@foreach (var cell in row) { <td>@cell</td> }</tr>
+        }
+        </tbody>
+    </table>
+}
+else if (!string.IsNullOrEmpty(type))
+{
+    <p class="text-muted">Нет данных для отображения. Убедитесь, что выбран сотрудник (для личной карточки) и что в базе есть сотрудники.</p>
+}

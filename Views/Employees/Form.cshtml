@@ -1,0 +1,89 @@
+@model Kadry.Models.Employee
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Новый сотрудник" : "Редактирование сотрудника";
+    var action = Model.Id == 0 ? "Create" : "Edit";
+}
+<h3>@ViewData["Title"]</h3>
+<form method="post" asp-action="@action">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">ФИО</label>
+            <input asp-for="FullName" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Пол</label>
+            <select asp-for="Gender" class="form-select">
+                <option value="">-- выбрать --</option>
+                <option value="Мужской">Мужской</option>
+                <option value="Женский">Женский</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Дата рождения</label>
+            <input asp-for="BirthDate" type="date" class="form-control" value="@Model.BirthDate.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Дата приёма</label>
+            <input asp-for="HireDate" type="date" class="form-control" value="@Model.HireDate.ToString("yyyy-MM-dd")" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Оклад</label>
+            <input asp-for="Salary" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Подразделение</label>
+            <select asp-for="DepartmentId" asp-items="ViewBag.Departments" class="form-select">
+                <option value="">-- выбрать --</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Должность</label>
+            <select asp-for="PositionId" asp-items="ViewBag.Positions" class="form-select">
+                <option value="">-- выбрать --</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Профессия</label>
+            <select asp-for="ProfessionId" asp-items="ViewBag.Professions" class="form-select">
+                <option value="">-- выбрать --</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Образование</label>
+            <select asp-for="EducationId" asp-items="ViewBag.Educations" class="form-select">
+                <option value="">-- выбрать --</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Серия паспорта</label>
+            <input asp-for="PassportSeries" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Номер паспорта</label>
+            <input asp-for="PassportNumber" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Кем выдан</label>
+            <input asp-for="PassportIssuedBy" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Дата выдачи</label>
+            <input asp-for="PassportIssueDate" type="date" class="form-control" value="@Model.PassportIssueDate.ToString("yyyy-MM-dd")" />
+        </div>
+
+        <div class="col-md-8">
+            <label class="form-label">Адрес</label>
+            <input asp-for="Address" class="form-control" />
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+    </div>
+</form>
